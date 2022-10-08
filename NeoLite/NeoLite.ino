@@ -6,7 +6,7 @@
 #include "analog.h"
  #include "button.h"
  
-int pin = 0, nleds = 46;
+int pin = 5, nleds = 46;
  
 NeoLite rgb( pin, nleds, 2 ); //pin , # led, color mode
 
@@ -19,7 +19,7 @@ analog bb(A0, true); //fake analog for brightness fading button.
 
 void mClick();
 //analog mx(A3, true); //2nd pot optional// remove 2 lines
-Button key(2, mClick, true);
+Button key(3, mClick, true);
   
 
 void mClick(){
@@ -39,8 +39,8 @@ void updateBrightness( ){
 void setup() {
   
   //builtin led
-  pinMode(13, OUTPUT );
-  digitalWrite(13, HIGH);
+//  pinMode(13, OUTPUT );
+//  digitalWrite(13, HIGH);
   
 //  //'built in pot' 
 //  pinMode(15, OUTPUT );

@@ -54,7 +54,7 @@ class NeoLite{
           case 2: //purpleish..
                  color(105, 0, 255 ); break;
           
-          case 3: color(77, 88, 0 ); break; //yellow
+          case 7: color(77, 88, 0 ); break; //yellow
           
           case 4: ///greenblue
                 color(0, 255, 10 ); break;
@@ -65,7 +65,7 @@ class NeoLite{
           case 6: //blue
                 color(0, 111, 255 ); break;
           
-          case 7: //white?
+          case 3: //white?
                 color(255, 200, 250 ); break;
           
           case 8:  rcy( );// delay(55);
@@ -213,7 +213,7 @@ class NeoLite{
         } 
       
         int tik(){
-            if(mtime++ > 1000) mtime = 0; //a fake timer for attiny85
+            if(mtime++ > 22000) mtime = 0; //a fake timer for attiny85
             if(mtime == 0) {
             if(mm++ > 1000) mm = 0;  //needs adjustment for 32bit //esp32/rp2040
             setMode(); // make changes bit/by bit/ 

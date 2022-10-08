@@ -6,7 +6,7 @@
 #include "analog.h"
  #include "button.h"
  
-short mpin = 6, nleds = 46;
+short mpin = 6, nleds = 18;
  
 NeoLite rgb( mpin, nleds, 0 ); //pin , # led, color mode
 
@@ -21,15 +21,15 @@ NeoLite rgb( mpin, nleds, 0 ); //pin , # led, color mode
 
 //tiny 1/4 a3
 //switch pins digital in
-short shigh = 12;  //broken 2 pos switch. down = button
-short soff =  13;
+short shigh = 13;  //broken 2 pos switch. down = button
+short soff =  12;
 void aClick();  
-analog aa(A1); 
+analog aa(A3, true); 
 Button key(shigh, aClick, false); // 2. altmode aclick // switch mode mclick
  
 
 //mode pot
-analog ab(A2 , true); //2nd param flip analog direction
+analog ab(A2 , false); //2nd param flip analog direction
 short mm = 0; //color mode
 short maxbrightness = 255;
 volatile short vv = 0; //switch mode
@@ -61,7 +61,12 @@ int getSwitchVal(){
   else return (vv == 1 ? 111: 255);
 }
 
+void updateColor(){
+  int c = map(ab.getVal(), 0, 255, 0, 9);
+  rgb.setStyle(c);
+}
 void updateMode(){  
+  updateColor();
     int t = aa.getVal();
     if(full) maxbrightness = 255;
     else maxbrightness = t < 22 ? 22: t;  
@@ -74,7 +79,8 @@ void updateMode(){
 void aClick(){
   int t = key.tap();
    if(t == 0) return;
-    full = !full;
+//    full = !full;
+  on =! on;
 }
 
 
@@ -84,7 +90,7 @@ void setup() {
   pinMode(mpin, OUTPUT );
   rgb.ini();
   rgb.tik();
-  pinMode(shigh, INPUT_PULLUP );
+//  pinMode(shigh, INPUT_PULLUP );
   pinMode(soff, INPUT_PULLUP );
   key.ini();
 
@@ -95,7 +101,7 @@ void setup() {
 void loop() {  
 
     if(k  ==0) updateMode();
-    if(k% 1000==0) checkSwitch();
+//    if(k% 1000==0) checkSwitch();
     
     k = rgb.tik();
      
