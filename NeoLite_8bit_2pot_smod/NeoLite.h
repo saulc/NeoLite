@@ -213,8 +213,9 @@ class NeoLite{
         } 
       
         int tik(){
-            if(mtime++ > 22000) mtime = 0; //a fake timer for attiny85
-            if(mtime == 0) {
+            if(mtime++ > 10000){ 
+              mtime = 0; //a fake timer for attiny85
+         
             if(mm++ > 1000) mm = 0;  //needs adjustment for 32bit //esp32/rp2040
             setMode(); // make changes bit/by bit/ 
             }

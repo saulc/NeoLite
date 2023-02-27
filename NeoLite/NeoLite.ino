@@ -4,30 +4,30 @@
 
 #include "NeoLite.h"
 #include "analog.h"
- #include "button.h"
+// #include "button.h"
  
-int pin = 5, nleds = 46;
+int pin = 3, nleds = 46;
  
-NeoLite rgb( pin, nleds, 2 ); //pin , # led, color mode
+NeoLite rgb( pin, nleds, 1 ); //pin , # led, color mode
 
   
-int mm = 0; //color mode
+int mm = 1; //color mode
 int maxbrightness = 255;
 volatile bool on = false; 
 analog bb(A0, true); //fake analog for brightness fading button.
 
 
-void mClick();
-//analog mx(A3, true); //2nd pot optional// remove 2 lines
-Button key(3, mClick, true);
-  
-
-void mClick(){
-   if(key.tap() == 0) return;
-    if(mm++ > 9) mm = 0;
-      rgb.setStyle(mm); 
-    
-} 
+//void mClick();
+////analog mx(A3, true); //2nd pot optional// remove 2 lines
+//Button key(3, mClick, true);
+//  
+//
+//void mClick(){
+//   if(key.tap() == 0) return;
+//    if(mm++ > 9) mm = 0;
+//      rgb.setStyle(mm); 
+//    
+//} 
  
 void updateBrightness( ){
     int v = bb.getVal(on ? maxbrightness : 0);
@@ -53,14 +53,14 @@ void setup() {
   rgb.ini();
   rgb.tik(); 
   on = true;
-  key.ini(); //ini button
+//  key.ini(); //ini button
 }
 
  int k  = 0;
  int l = 2;
  
 void loop() {  
-  if(k++ > 10000){
+  if(k++ > 100000){
     k=0;
 //    if(l++ > 5)
 //      l = 1;

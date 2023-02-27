@@ -31,13 +31,8 @@ class NeoLite{
       }
 
 
-      void toc( int t){
-        tok = t;
-         
-      }
-      
       void color(int r, int g, int b){
-        setColor(r, g, b, tok);
+        setColor(r, g, b);
          
       }
       void setStyle(int c){ 
@@ -70,16 +65,15 @@ class NeoLite{
           case 6: //blue
                 color(0, 111, 255 ); break;
           
+          case 7: //white?
+                color(255, 200, 250 ); break;
           
-          case 7:  rcy( );// delay(55);
+          case 8:  rcy( );// delay(55);
                   break;
          
-          case 8: rainbo( ); //delay(55); 
+          case 9: rainbo( ); //delay(55); 
                   break; //no break for dual mode
-                  
-          case 9: //white?
-                color(255, 200, 200 ); break;
-                  
+          
           default: color(111, 0, 0); break;
         }
       }
@@ -194,22 +188,27 @@ class NeoLite{
           return lites.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
         }
 
-        void setColor(int r, int g, int b, int t) {
+        void setColor(int r, int g, int b) {
           
-              lites.setPixelColor(0, lites.Color(r, g, b) );
+              lites.setPixelColor(0, lites.Color(255, 0,0) );
+//              lites.setPixelColor(0, lites.Color(r, g, b) );
               if(leds > 1){
                  uint16_t mid = leds/2;
                  uint16_t i = mm%mid;   
               //      lites.setPixelColor(lites.numPixels()-i, c);
+              if(i >= mid-2  ) {
+                
+                    lites.setPixelColor(mid+i, lites.Color(255, 0, 0));
+                    lites.setPixelColor(mid-i, lites.Color(255, 0, 0));
+              }else{
                     lites.setPixelColor(mid+i, lites.Color(r, g, b));
                     lites.setPixelColor(mid-i, lites.Color(r, g, b));
+                }
               }
-              for(int x=0; x<t; x++)
-              lites.setPixelColor(x, lites.Color(255, 0, cMode == 0 ? 111:0 ) );
               lites.show();
            
         }
-        
+  
         int getModeCount(){
           return nModes;
         }
@@ -221,7 +220,7 @@ class NeoLite{
         } 
       
         int tik(){
-            if(mtime++ > 1000) mtime = 0; //a fake timer for attiny85
+            if(mtime++ > 20000) mtime = 0; //a fake timer for attiny85
             if(mtime == 0) {
             if(mm++ > 1000) mm = 0;  //needs adjustment for 32bit //esp32/rp2040
             setMode(); // make changes bit/by bit/ 
@@ -230,8 +229,6 @@ class NeoLite{
         }
     private:
 
-      int tok = 0;
-      
       int maxbrightness = 255;
       int br = 50;  //brightness
    

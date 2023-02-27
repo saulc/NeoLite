@@ -6,7 +6,7 @@
 #include "analog.h"
  #include "button.h"
  
-short mpin = 5, nleds = 181;
+short mpin = 5, nleds = 121;
  
 NeoLite rgb( mpin, nleds, 0 ); //pin , # led, color mode
 
@@ -16,7 +16,7 @@ NeoLite rgb( mpin, nleds, 0 ); //pin , # led, color mode
  */
 void aClick();
 void bClick();
-int pba = 2, pbb = 3; 
+int pba = 3, pbb = 2; 
 Button keya(pba , aClick,true); 
 Button keyb(pbb , bClick, true); 
  
@@ -39,7 +39,7 @@ void aClick(){
     lon = !lon;
    }else 
    if(bmode){ 
-      if(bm++>4) bm = 0;
+      if(bm++>=4) bm = 0;
     } else{
       if(cm++>10) cm = 0;
        rgb.setStyle(cm);
@@ -60,7 +60,7 @@ void bClick(){
     bmode = !bmode;
    }
    else if(bmode){  
-      if(bm--<0) bm = 4;
+      if(bm--<=0) bm = 4;
     } else{
       if(cm--<0) cm = 9;
        rgb.setStyle(cm);

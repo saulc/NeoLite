@@ -52,7 +52,7 @@ class NeoLite{
                    break;
             
           case 2: //purpleish..
-                 color(105, 0, 255 ); break;
+                 color(105, 0, 205 ); break;
           
           case 3: color(77, 88, 0 ); break; //yellow
           

@@ -21,7 +21,7 @@ NeoLite rgb( mpin, nleds, 0 ); //pin , # led, color mode
  */
 
 void aClick();                                                            
-analog aa(A2); //a3  p3 . a2 p4
+analog aa(A3, true); //mode pot a3  p3 . a2 p4
 Button key(2, aClick, true); // 2. altmode aclick // switch mode mclick
   
 short mm = 0; //color mode
@@ -42,7 +42,7 @@ void updateMode(){
 }
 
 void checkMode(){
-   mm = map(aa.getVal(), 0, 255, 0, 9);
+   mm = map(aa.getVal(), 0, 255, 0, 10);
    rgb.setStyle(mm);
 }
  
@@ -67,13 +67,26 @@ void motion(){
        
     }
 }
+//
+//void checkMotion(){
+//  
+//  if(on and micros()-lastTrigger > 10000000){
+//    on = false;
+//    lastTrigger = 0;
+//  }
+//}
 
 void checkMotion(){
-  
-  if(on and micros()-lastTrigger > 10000000){
+  if(!on) return;
+  long tl = micros()-lastTrigger;
+  long l = round(tl/2000000);
+  if(on and tl > 24000000){
     on = false;
-    lastTrigger = 0;
+    lastTrigger = 0; 
+    rgb.toc(0);
+    checkMode();
   }
+  else if(on and l > 0) rgb.toc(l);
 }
 
 void setup() {

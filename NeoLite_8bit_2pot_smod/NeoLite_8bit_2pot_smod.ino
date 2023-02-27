@@ -6,7 +6,7 @@
 #include "analog.h"
  #include "button.h"
  
-short mpin = 6, nleds = 18;
+short mpin = 6, nleds = 181;
  
 NeoLite rgb( mpin, nleds, 0 ); //pin , # led, color mode
 
@@ -24,7 +24,7 @@ NeoLite rgb( mpin, nleds, 0 ); //pin , # led, color mode
 short shigh = 13;  //broken 2 pos switch. down = button
 short soff =  12;
 void aClick();  
-analog aa(A3, true); 
+analog aa(A1, true); 
 Button key(shigh, aClick, false); // 2. altmode aclick // switch mode mclick
  
 
@@ -62,7 +62,7 @@ int getSwitchVal(){
 }
 
 void updateColor(){
-  int c = map(ab.getVal(), 0, 255, 0, 9);
+  int c = map(ab.getVal(), 0, 255, 0, 10);
   rgb.setStyle(c);
 }
 void updateMode(){  
@@ -79,8 +79,8 @@ void updateMode(){
 void aClick(){
   int t = key.tap();
    if(t == 0) return;
-//    full = !full;
-  on =! on;
+    full = !full;
+//  on =! on;
 }
 
 
@@ -90,7 +90,7 @@ void setup() {
   pinMode(mpin, OUTPUT );
   rgb.ini();
   rgb.tik();
-//  pinMode(shigh, INPUT_PULLUP );
+  pinMode(shigh, INPUT_PULLUP );
   pinMode(soff, INPUT_PULLUP );
   key.ini();
 
@@ -101,7 +101,7 @@ void setup() {
 void loop() {  
 
     if(k  ==0) updateMode();
-//    if(k% 1000==0) checkSwitch();
+    if(k% 1000==0) checkSwitch();
     
     k = rgb.tik();
      
