@@ -34,7 +34,7 @@ void setup() {
 //  Serial.begin(115200);
   WiFi.mode(WIFI_STA);
   WiFi.setHostname("PicoW2");
-  Serial.printf("Connecting to '%s' with '%s'\n", ssid, password);
+//  Serial.printf("Connecting to '%s' with '%s'\n", ssid, password);
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
 //    Serial.print(".");
@@ -48,17 +48,22 @@ void setup() {
   rgb.tik(); 
   on = true;
 }  
-void process(String dat){
+void process(String dt){
+  String dat = dt.substring(5, dt.length()-8);
 //  Serial.print("Input: ");
 //  Serial.println( dat);
   char in[] = {'a', 'b', 'c', 'd', 'e', 'f'};
-   for(int i=0;i<5; i++){
+   for(int i=0;i<3; i++){
     int st = dat.indexOf(in[i]);
     int en = dat.indexOf(in[i+1]);
       String v = dat.substring(st+1, en); 
       int vi = v.toInt();
 //  Serial.print(i);
-//  Serial.print(" : ");
+//  Serial.print(" - i - ");
+//  Serial.print(v);
+//  Serial.print("  -str- ");
+//  Serial.print(i);
+//  Serial.print(" - int - ");
 //  Serial.println( vi);
       dat[i] = vi;
   }

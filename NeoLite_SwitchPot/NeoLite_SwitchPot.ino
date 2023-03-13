@@ -52,7 +52,16 @@ void checkSwitch(){
 }
 
 int bri(){ 
-  return map(br.getVal(), 0, 255, 11, 199);
+  return map(br.getVal(), 0, 255, 11, 222);
+//  int b =  br.getVal();
+//  int t = 0;
+//  int s = 240;
+//  if(b < s){
+//    t = map(b, 0, s-1, 11, 211);
+//  }else{
+//    t = map(b, s, 255, 200, 222);
+//  }
+//  return t;
 }
 
 //off low full

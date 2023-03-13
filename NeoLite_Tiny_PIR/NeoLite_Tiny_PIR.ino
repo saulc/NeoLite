@@ -6,7 +6,7 @@
 #include "NeoLite.h"
 #include "analog.h" 
  
-short mpin = 0, nleds = 46;
+short mpin = 0, nleds = 64;
  
 NeoLite rgb( mpin, nleds, 1 ); //pin , # led, color mode
 
@@ -25,9 +25,9 @@ short maxbrightness = 255;
 volatile short vv = 0; //switch mode
 volatile bool on = true; 
 analog bb(A0, true); //fake analog for brightness fading button.
+analog aa(A2, true);
 
-
-short sensorpin = 3; 
+short sensorpin = 1; 
  
 volatile long lastTrigger = 0;
   
@@ -38,8 +38,8 @@ void updateMode(){
 }
 
 void checkMode(){
-//   mm = map(aa.getVal(), 0, 255, 0, 9);
-   rgb.setStyle(1);
+   mm = map(aa.getVal(), 0, 255, 0, 10);
+   rgb.setStyle(mm);
 }
   
 
@@ -87,7 +87,7 @@ void loop() {
   checkMotion();
   
     if(k  ==0) updateMode();
-//    if(k% 1000==0 ) checkMode();
+    if(k% 1000==0 ) checkMode();
     
     k = rgb.tik();
      

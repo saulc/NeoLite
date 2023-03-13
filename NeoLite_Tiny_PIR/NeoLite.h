@@ -204,8 +204,9 @@ class NeoLite{
                     lites.setPixelColor(mid-i, lites.Color(r, g, b));
                     
               }
-              for(int x=0; x<t; x++)
-              lites.setPixelColor(x, lites.Color(255, 0, 0) );
+//              for(int x=0; x<t; x++)
+              
+              lites.setPixelColor(t, lites.Color(255, 0, 0) );
               lites.show();
            
         }
@@ -221,7 +222,7 @@ class NeoLite{
         } 
       
         int tik(){
-            if(mtime++ > 1000) mtime = 0; //a fake timer for attiny85
+            if(mtime++ > 2000) mtime = 0; //a fake timer for attiny85
             if(mtime == 0) {
             if(mm++ > 1000) mm = 0;  //needs adjustment for 32bit //esp32/rp2040
             setMode(); // make changes bit/by bit/ 
