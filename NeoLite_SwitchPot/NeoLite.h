@@ -36,9 +36,13 @@ class NeoLite{
          
       }
       void setStyle(int c){ 
+          if(c != cMode){
+            freeze = true;  mm = 0;
+          }
             cMode = c; 
               if(c > nModes) cMode = nModes;
               else if(c < 0) cMode = 0;
+//           
         }
         
       void setMode( ){
@@ -81,8 +85,14 @@ class NeoLite{
         
         //timer updated rainbow 
         void rainbo( ) {
-          if(j++ > 255) j = 0;
-          uint16_t i;
+            uint16_t i = mm%leds;
+          if(freeze){
+            if(i >= leds-1) freeze = false;
+              lites.setPixelColor( i, Wheel((i+j) & 255));
+            lites.show();
+            return;
+          } 
+          if(j++ > 255) j = 0; 
             for(i=0; i<lites.numPixels(); i++) {
               lites.setPixelColor(i, Wheel((i+j) & 255));
             }
@@ -92,13 +102,20 @@ class NeoLite{
         }
         // Slightly different, this makes the rainbow equally distributed throughout
         void rcy( ) {
-          uint16_t i;
+//          uint16_t i;
+            uint16_t i = mm%leds;
+          if(freeze){
+            if(i >= leds-1) freeze = false;
+              lites.setPixelColor(i, Wheel(((i * 256 / lites.numPixels()) + j) & 255));
+            lites.show(); 
+            return;
+          }  
+          
           if(j++ > 255) j = 0;
              for(i=0; i< lites.numPixels(); i++) {
               lites.setPixelColor(i, Wheel(((i * 256 / lites.numPixels()) + j) & 255));
-            }
+            }   
             lites.show(); 
-          
         }
         
         
@@ -221,7 +238,7 @@ class NeoLite{
             return mtime;
         }
     private:
-
+      bool freeze = true;
       int maxbrightness = 255;
       int br = 50;  //brightness
    

@@ -14,19 +14,40 @@ NeoLite rgb( mpin, nleds, 1 ); //pin , # led, color mode
  * 
  *    
  */
-  
 //mode pot 
 short mm = 0; //color mode
 short maxbrightness = 255;
 volatile short vv = 0; //switch mode
 volatile bool on = true; 
 analog bb(A0, true); //fake analog for brightness fading button.
-analog li(A2, true);  
-analog aa(A1, true);  
+analog li(A3, true);  
+analog aa(A1, false);  //p2A1 p3A3 p4A2
+
+  
+short shigh = 1;
+short soff =  4;
+
+//2 position spdt switch
+void checkSwitch(){
+  bool h = digitalRead(shigh);
+  bool o = digitalRead(soff);
+ //wtf this is so picky idk why. spdt 
+  if(h == LOW) vv = 2;
+   else if(o == HIGH and h == HIGH)  vv = 1;
+   else {
+       vv = 0;
+//       on = false;
+       return;
+   }
+//    on = true;
+}
 
 void updateBrightness(){
     int sr = li.getVal();
-    on = sr < 111;
+    if(vv == 0) on = sr < 111;
+    else if(vv == 2)  on = sr >= 111;
+    else on = true;
+    
 //      //brightness mode
 //     maxbrightness = getSwitchVal(); 
      int b = bb.getVal( on==true ? maxbrightness: 0); 
@@ -43,6 +64,9 @@ void updateMode(){
 void setup() {
 
   
+  pinMode(shigh, INPUT_PULLUP );
+  pinMode(soff, INPUT_PULLUP );
+  
   rgb.ini();
   rgb.tik(); 
  
@@ -55,9 +79,11 @@ void loop() {
 
     if(k  ==0) {
       updateBrightness(); 
-      updateMode();
+      updateMode(); 
+    checkSwitch();
     } 
-    
+//    
+//    if(k% 1000==0) 
     k = rgb.tik();
      
 } //end loop

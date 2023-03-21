@@ -52,7 +52,7 @@ void checkSwitch(){
 }
 
 int bri(){ 
-  return map(br.getVal(), 0, 255, 11, 222);
+  return map(br.getVal(), 0, 255, 1, 222);
 //  int b =  br.getVal();
 //  int t = 0;
 //  int s = 240;
