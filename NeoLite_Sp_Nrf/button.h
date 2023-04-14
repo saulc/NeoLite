@@ -1,7 +1,7 @@
 #ifndef button_h
 #define button_h
 #include "Arduino.h"
-//#include "PinChangeInterrupt.h"
+#include "PinChangeInterrupt.h"
 /*
  * Code keys v1 - 2022/8/8 Saul C.
  * button dobounce + double tap (needs work)
@@ -12,9 +12,9 @@
 class Button{
   public: 
   
-     Button(int p , bool isinterupt){
+     Button(int p , void* callback, bool isinterupt){
       pin = p;
-//      clickCallback = callback; 
+      clickCallback = callback; 
       isInterupt = isinterupt;
      }
     ~Button(){}
@@ -22,8 +22,8 @@ class Button{
     void ini(){
       pinMode(pin, INPUT_PULLUP); 
       //no press n hold, alternate version for 'gaming response'
-//      if(isInterupt) attachInterrupt(0, clickCallback, FALLING );  
-//      else attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(pin), clickCallback, FALLING); 
+      if(isInterupt) attachInterrupt(0, clickCallback, FALLING );  
+      else attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(pin), clickCallback, FALLING); 
       }
      int getPin(){ 
         return pin;
@@ -49,7 +49,7 @@ class Button{
     long lastClick = 0; // for 3 interupt micros.
     long clickDelay = 150;  //reduce for "gaming" response, false/extra key taps ok.
     bool isInterupt;    //3 buttons isn't enough.....this may not work
-//    void   *clickCallback; //just need to save a pointer and the int lib will do the rest
-    long doubleTapDelay = 1150;  
+    void   *clickCallback; //just need to save a pointer and the int lib will do the rest
+    long doubleTapDelay = 350;  
 };    
 #endif

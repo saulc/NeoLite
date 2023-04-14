@@ -4,43 +4,44 @@
 
 #include "NeoLite.h"
 #include "analog.h"
-// #include "button.h"
+ #include "button.h"
  
-int pin = 3, nleds = 46;
+int pin = PIN_NEOPIXEL, nleds = 2;
  
-NeoLite rgb( pin, nleds, 1 ); //pin , # led, color mode
+NeoLite rgb( pin, nleds, 0 ); //pin , # led, color mode
 
   
-int mm = 1; //color mode
+volatile int mm = 1; //color mode
 int maxbrightness = 255;
-volatile bool on = false; 
+volatile bool mOn = false; 
 analog bb(A0, true); //fake analog for brightness fading button.
 
 
-//void mClick();
-////analog mx(A3, true); //2nd pot optional// remove 2 lines
-//Button key(3, mClick, true);
-//  
-//
-//void mClick(){
-//   if(key.tap() == 0) return;
-//    if(mm++ > 9) mm = 0;
+void mClick();
+//analog mx(A3, true); //2nd pot optional// remove 2 lines
+Button key(0, true);
+  
+
+void mClick(){
+  int tt = key.tap();
+   if( tt== 0) return;
+   if(tt = 1){
+    if(mm++ > 9) mm = 0;
 //      rgb.setStyle(mm); 
-//    
-//} 
+//   }
+//   else if(tt == 2){
+//    mm--;
+     mOn = !mOn;
+   }
+    
+} 
  
-void updateBrightness( ){
-    int v = bb.getVal(on ? maxbrightness : 0);
-    rgb.setPower(v);
-}
-
-
-
 void setup() {
   
-  //builtin led
-//  pinMode(13, OUTPUT );
-//  digitalWrite(13, HIGH);
+  //builtin rgb power pin
+  pinMode(38, OUTPUT );
+  digitalWrite(38, HIGH);
+//  delay(11);
   
 //  //'built in pot' 
 //  pinMode(15, OUTPUT );
@@ -52,26 +53,51 @@ void setup() {
 //  pinMode(pin, OUTPUT );
   rgb.ini();
   rgb.tik(); 
-  on = true;
-//  key.ini(); //ini button
+  mOn = true;
+  key.ini(); //ini button
+  attachInterrupt(0, mClick, FALLING );  
+}
+ 
+    int t = 0;
+ int l = 2;
+
+ int f = 0;
+ bool pp = false;
+ 
+void updateBrightness( ){
+    int v = bb.getVal(mOn ? maxbrightness : 0);
+    rgb.setPower(v);
+//    
+//  Serial.print(pp);
+//  Serial.print("  ");
+//  Serial.print(mOn);
+//  Serial.print("   color : "); 
+//  Serial.print(mm); 
+//  Serial.print("  v : "); 
+//  Serial.println(v); 
 }
 
- int k  = 0;
- int l = 2;
- 
+
+
 void loop() {  
-  if(k++ > 100000){
-    k=0;
+//  if(t > 1000){
+//    k=0;
 //    if(l++ > 5)
 //      l = 1;
-    if(k ==0){
+    if(t != l){
+//      if(f++ > 1000){
+//        f = 0;
+//        pp = !pp;
+//  digitalWrite(NEOPIXEL_POWER, pp);
+      }
+      
       updateBrightness();
-
+      l = t;
     }
-    int t = rgb.tik();
+     t = rgb.tik();
     
 //  Serial.print("t : "); 
-//  Serial.println(l); 
-  }
+//  Serial.println(t); 
+  
 } 
   

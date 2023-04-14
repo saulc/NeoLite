@@ -26,8 +26,7 @@ class NeoLite{
       void ini( ){
           lites = Adafruit_NeoPixel(leds, pin, NEO_GRB + NEO_KHZ800); 
         lites.begin();
-      
-        lites.setBrightness(0);  
+        lites.setBrightness(0);  //remove flash on power
         lites.show(); // Initialize all pixels to 'off'
       }
 
@@ -37,14 +36,22 @@ class NeoLite{
          
       }
       void setStyle(int c){ 
+        
+              if(c > nModes) c= nModes;
+              else if(c < 0) c = 0;
+              
+          if(c != cMode){
+            //reset animations if the mode has changed.
+            freeze = true;  
+            mm = 0;
             cMode = c; 
-              if(c > 9) cMode = 9;
-              else if(c < 0) cMode = 0;
+          }
+//           
         }
         
       void setMode( ){
         switch(cMode){ 
-          case 0:  color(100, 0, 0); break;
+          case 0:  color(0, 0, 0); break;
       
           case 1: //red
                 color(255, 0, 0 ); break;
@@ -56,30 +63,38 @@ class NeoLite{
                  color(105, 0, 255 ); break;
           
           case 4: color(77, 88, 0 ); break; //yellow
+            
+          case 5: //blue/green
+                color(0, 255, 50 ); break;
           
-          case 5: //green
-                color(0, 205, 50 ); break;
-          
-          case 6: //blue
-                color(0, 50, 255 ); break;
+          case 6: //orange?
+                color(255, 55, 0 ); break;
           
           case 7: //white?
-                color(255, 200, 250 ); break;
-          
-          case 8:  rcy( );// delay(55);
-                  break;
-         
-          case 9: rainbo( ); //delay(55); 
+                color(255, 177, 151 ); break;
+                
+          case 8: rainbo( ); //delay(55); 
                   break; //no break for dual mode
           
+          case 9:  rcy( );// delay(55);
+                  break;
+         
+          
+          default: color(111, 0, 0); break;
         }
       }
         
         
         //timer updated rainbow 
         void rainbo( ) {
-          if(j++ > 255) j = 0;
-          uint16_t i;
+            uint16_t i = mm%leds;
+          if(freeze){
+            if(i >= leds-1) freeze = false;
+              lites.setPixelColor( i, Wheel((i+j) & 255));
+            lites.show();
+            return;
+          } 
+          if(j++ > 255) j = 0; 
             for(i=0; i<lites.numPixels(); i++) {
               lites.setPixelColor(i, Wheel((i+j) & 255));
             }
@@ -89,13 +104,20 @@ class NeoLite{
         }
         // Slightly different, this makes the rainbow equally distributed throughout
         void rcy( ) {
-          uint16_t i;
+//          uint16_t i;
+            uint16_t i = mm%leds;
+          if(freeze){
+            if(i >= leds-1) freeze = false;
+              lites.setPixelColor(i, Wheel(((i * 256 / lites.numPixels()) + j) & 255));
+            lites.show(); 
+            return;
+          }  
+          
           if(j++ > 255) j = 0;
              for(i=0; i< lites.numPixels(); i++) {
               lites.setPixelColor(i, Wheel(((i * 256 / lites.numPixels()) + j) & 255));
-            }
+            }   
             lites.show(); 
-          
         }
         
         
@@ -188,11 +210,6 @@ class NeoLite{
         void setColor(int r, int g, int b) {
           
               lites.setPixelColor(0, lites.Color(r, g, b) );
-              lites.setPixelColor(1, lites.Color(r, g, b) );
-              if(leds == 2) {
-              lites.show();
-              return;
-              }
               if(leds > 1){
                  uint16_t mid = leds/2;
                  uint16_t i = mm%mid;   
@@ -204,6 +221,9 @@ class NeoLite{
            
         }
   
+        int getModeCount(){
+          return nModes;
+        }
         void setPower(int p){
           if(p > maxbrightness) p = maxbrightness;
           
@@ -212,16 +232,15 @@ class NeoLite{
         } 
       
         int tik(){
-            if(mtime++ > 300000) mtime = 0; //a fake timer for attiny85
-            if(mtime == 0) { 
-            if(mm++ > 10000) mm = 0;  //needs adjustment for 32bit //esp32/rp2040
+            if(mtime++ > 30000) mtime = 0; //a fake timer for attiny85
+            if(mtime == 0) {
+            if(mm++ > 1000) mm = 0;  //needs adjustment for 32bit //esp32/rp2040
             setMode(); // make changes bit/by bit/ 
             }
-            return mm;
+            return mtime;
         }
     private:
-
-    int ml = 0;
+      bool freeze = true;
       int maxbrightness = 255;
       int br = 50;  //brightness
    
@@ -229,6 +248,7 @@ class NeoLite{
       int mm = 0;     //animation time
       uint16_t  j = 0;  // rainbow animation index
       int cMode = 0;
+      const int nModes = 9;
       
     int pin = 5;
     int leds = 11; //how many LEDS in the strip

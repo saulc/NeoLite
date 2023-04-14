@@ -30,9 +30,9 @@ short maxbrightness = 255;
 volatile short vv = 0; //switch mode
 volatile bool on = true; 
 analog bb(A0, true); //fake analog for brightness fading button.
-analog aa(A0, true); //color mode//2nd pot optional// remove 2 lines
+analog aa(A1, false); //color mode//2nd pot optional// remove 2 lines
 
-analog br(A1, false); //fake analog for brightness fading button.
+//analog br(A1, false); //fake analog for brightness fading button.
 //void mClick();
 //Button key(2, mClick, true);
 
@@ -52,7 +52,8 @@ void checkSwitch(){
 }
 
 int bri(){ 
-  return map(br.getVal(), 0, 255, 1, 222);
+  return 111;
+//  return map(br.getVal(), 0, 255, 1, 222);
 //  int b =  br.getVal();
 //  int t = 0;
 //  int s = 240;
@@ -79,8 +80,8 @@ void updateBrightness(){
 
 void updateMode(){ 
       //color mode
-      mm = map(aa.getVal(), 0, 255, -1, 10);
-      rgb.setStyle( mm <1 ? 0 : mm);
+      mm = map(aa.getVal(), 0, 255, 1, 10);
+      rgb.setStyle(  mm);
      
 }
 

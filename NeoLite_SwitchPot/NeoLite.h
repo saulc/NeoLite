@@ -47,36 +47,34 @@ class NeoLite{
         
       void setMode( ){
         switch(cMode){ 
-//          case 0:  color(100, 0, 0); break;
+          case 0:  color(0, 0, 0); break;
       
-          case 0: //red
+          case 1: //red
                 color(255, 0, 0 ); break;
           
-          case 1:  color(255, 0, 70 ); //pink
+          case 2:  color(255, 0, 70 ); //pink
                    break;
             
-          case 2: //purpleish..
+          case 3: //purpleish..
                  color(105, 0, 255 ); break;
           
-          case 3: color(77, 88, 0 ); break; //yellow
-          
-          case 4: ///greenblue
-                color(0, 255, 10 ); break;
-                
+          case 4: color(77, 88, 0 ); break; //yellow
+            
           case 5: //blue/green
                 color(0, 255, 50 ); break;
           
-          case 6: //blue
+          case 6: //orange?
                 color(255, 55, 0 ); break;
           
-          case 7: rainbo( ); //delay(55); 
+          case 7: //white?
+                color(255, 177, 151 ); break;
+                
+          case 8: rainbo( ); //delay(55); 
                   break; //no break for dual mode
           
-          case 8:  rcy( );// delay(55);
+          case 9:  rcy( );// delay(55);
                   break;
          
-          case 9: //white?
-                color(255, 177, 151 ); break;
           
           default: color(111, 0, 0); break;
         }
