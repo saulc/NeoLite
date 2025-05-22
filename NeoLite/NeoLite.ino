@@ -6,41 +6,45 @@
 #include "analog.h"
  #include "button.h"
  
-int pin = PIN_NEOPIXEL, nleds = 2;
+#include "buttonb.h"
+ //pico rp2040 boot button
+Buttonb bbs;
+
+int pin = 16, nleds = 2;
  
-NeoLite rgb( pin, nleds, 0 ); //pin , # led, color mode
+NeoLite rgb( pin, nleds, 9 ); //pin , # led, color mode
 
   
 volatile int mm = 1; //color mode
-int maxbrightness = 255;
+int maxbrightness = 111;
 volatile bool mOn = false; 
 analog bb(A0, true); //fake analog for brightness fading button.
 
 
 void mClick();
 //analog mx(A3, true); //2nd pot optional// remove 2 lines
-Button key(0, true);
+// Button key(0, true);
   
 
 void mClick(){
-  int tt = key.tap();
-   if( tt== 0) return;
-   if(tt = 1){
+  // int tt = key.tap();
+  //  if( tt== 0) return;
+  //  if(tt = 1){
     if(mm++ > 9) mm = 0;
 //      rgb.setStyle(mm); 
 //   }
 //   else if(tt == 2){
 //    mm--;
-     mOn = !mOn;
-   }
+    //  mOn = !mOn;
+  //  }
     
 } 
  
 void setup() {
   
   //builtin rgb power pin
-  pinMode(38, OUTPUT );
-  digitalWrite(38, HIGH);
+  // pinMode(38, OUTPUT );
+  // digitalWrite(38, HIGH);
 //  delay(11);
   
 //  //'built in pot' 
@@ -54,8 +58,8 @@ void setup() {
   rgb.ini();
   rgb.tik(); 
   mOn = true;
-  key.ini(); //ini button
-  attachInterrupt(0, mClick, FALLING );  
+  // key.ini(); //ini button
+  // attachInterrupt(0, mClick, FALLING );  
 }
  
     int t = 0;
@@ -78,6 +82,19 @@ void updateBrightness( ){
 }
 
 
+int c = 0; 
+void bs(){
+   
+  int ttt = bbs.tap();
+  if(ttt == 0) return;
+  
+
+    // Serial.println("Click");
+    // Serial.println(ttt);
+  if(ttt == 1)  mClick();
+  // else if(tttt==2) 
+  
+}
 
 void loop() {  
 //  if(t > 1000){
@@ -90,12 +107,13 @@ void loop() {
 //        pp = !pp;
 //  digitalWrite(NEOPIXEL_POWER, pp);
       }
-      
+      if(t==0){
       updateBrightness();
       l = t;
-    }
+    }  
      t = rgb.tik();
-    
+    // if(t%100==0)
+    // bs();
 //  Serial.print("t : "); 
 //  Serial.println(t); 
   

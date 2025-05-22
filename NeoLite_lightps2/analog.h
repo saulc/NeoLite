@@ -19,6 +19,8 @@ class analog{
     
     analog(int p,bool flip){ pin = p;  flipa = flip; }
     
+    analog(int p,bool flip, int n){ pin = p;  flipa = flip; }
+    
     int getVal( ){   
       
         int a = analogRead(pin);
@@ -53,8 +55,8 @@ class analog{
    //analog smoothing 
     int pin;
     bool flipa; //flip the analog direction
-    static const short numReadings = 24;    //more readings for a slower fade.
-    short readings[numReadings];      // the readings from the analog input
+    static const int numReadings = 24;    //more readings for a slower fade.
+    int readings[numReadings];      // the readings from the analog input
     int readIndex = 0;              // the index of the current reading
     int total = 0;                  // the running total
     int average = 0;                // the average

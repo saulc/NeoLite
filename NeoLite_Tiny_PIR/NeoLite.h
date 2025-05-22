@@ -195,18 +195,11 @@ class NeoLite{
 
         void setColor(int r, int g, int b, int t) {
           
-              lites.setPixelColor(0, lites.Color(r, g, b) );
-              if(leds > 1){
-                 uint16_t mid = leds/2;
-                 uint16_t i = mm%mid;   
-              //      lites.setPixelColor(lites.numPixels()-i, c);
-                    lites.setPixelColor(mid+i, lites.Color(r, g, b));
-                    lites.setPixelColor(mid-i, lites.Color(r, g, b));
-                    
-              }
-//              for(int x=0; x<t; x++)
+             for(int x=0; x<leds; x++)
+              lites.setPixelColor(x, lites.Color(r, g, b) );
               
-              lites.setPixelColor(t, lites.Color(255, 0, 0) );
+              
+              lites.setPixelColor(t, lites.Color(111, 0, 10) );
               lites.show();
            
         }

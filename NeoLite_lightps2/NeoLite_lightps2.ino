@@ -5,7 +5,7 @@
 #include "NeoLite.h"
 #include "analog.h"
  
-short mpin = 0, nleds = 64;
+short mpin = 5, nleds = 64;
  
 NeoLite rgb( mpin, nleds, 1 ); //pin , # led, color mode
 
@@ -16,17 +16,17 @@ NeoLite rgb( mpin, nleds, 1 ); //pin , # led, color mode
  */
 //mode pot 
 short mm = 0; //color mode
-short maxbrightness = 155;
+short maxbrightness = 255;
 volatile short vv = 0; //switch mode
 volatile bool on = true; 
-analog bb(A0, true); //fake analog for brightness fading button.
-analog li(A2, true);  
-analog aa(A1, false);  //p2A1 p3A3 p4A2
+analog bb(A1, true); //fake analog for brightness fading button.
+analog li(A3, true);  
+analog aa(A0, false);  //p2A1 p3A3 p4A2
 
   
-int cut = 88;
-short shigh = 1;
-short soff =  4;
+int cut = 55;
+short shigh = 15;
+short soff =  14;
 
 //2 position spdt switch
 void checkSwitch(){
@@ -45,6 +45,7 @@ void checkSwitch(){
 
 void updateBrightness(){
     int sr = li.getVal();
+  // Serial.println(sr);
     if(vv == 0) on = sr < cut;
     else if(vv == 2)  on = sr >= cut;
     else on = true;
@@ -64,7 +65,15 @@ void updateMode(){
 
 void setup() {
 
-  
+  // Serial.begin(115200);
+
+
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH );
+  pinMode(17, OUTPUT );
+  digitalWrite(17, HIGH );
+  pinMode(30, OUTPUT );
+  digitalWrite(30, HIGH );
   pinMode(shigh, INPUT_PULLUP );
   pinMode(soff, INPUT_PULLUP );
   
@@ -78,13 +87,15 @@ void setup() {
  
 void loop() {  
 
-    if(k  ==0) {
+    if(k == 0) {
+      
       updateBrightness(); 
       updateMode(); 
-    // checkSwitch();
+      checkSwitch();
+
     } 
 //    
-//    if(k% 1000==0) 
+  //  if(k% 1000==0) 
     k = rgb.tik();
      
 } //end loop

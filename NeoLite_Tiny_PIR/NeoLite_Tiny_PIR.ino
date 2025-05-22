@@ -8,7 +8,7 @@
  
 short mpin = 0, nleds = 64;
  
-NeoLite rgb( mpin, nleds, 1 ); //pin , # led, color mode
+NeoLite rgb( mpin, nleds, 0 ); //pin , # led, color mode
 
 /* 
  * alt mode mx key + pot 
@@ -25,7 +25,7 @@ short maxbrightness = 255;
 volatile short vv = 0; //switch mode
 volatile bool on = true; 
 analog bb(A0, true); //fake analog for brightness fading button.
-analog aa(A2, true);
+// analog aa(A2, true);
 
 short sensorpin = 1; 
  
@@ -38,7 +38,7 @@ void updateMode(){
 }
 
 void checkMode(){
-   mm = map(aa.getVal(), 0, 255, 0, 10);
+  //  mm = map(aa.getVal(), 0, 255, 0, 10);
    rgb.setStyle(mm);
 }
   
@@ -62,7 +62,7 @@ void checkMotion(){
     on = false;
     lastTrigger = 0; 
     rgb.toc(0);
-    checkMode();
+    // checkMode();
   }
   else if(on and l > 0) rgb.toc(l);
 }
@@ -87,9 +87,10 @@ void loop() {
   checkMotion();
   
     if(k  ==0) updateMode();
-    if(k% 1000==0 ) checkMode();
+    // if(k% 1000==0 ) checkMode();
     
     k = rgb.tik();
+    // delay(11);
      
 } //end loop
   
